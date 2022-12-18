@@ -3,12 +3,12 @@ const schemas = [
     title: "Contact Form",
     details: {
       name: {
-        type: "string",
+        type: "text",
         title: "Full Name",
         default: "Ram Bhattarai",
       },
       email: {
-        type: "string",
+        type: "email",
         title: "Email",
         default: "example@abc.com",
       },
@@ -23,12 +23,12 @@ const schemas = [
     title: "login form",
     details: {
       email: {
-        type: "string",
+        type: "email",
         title: "Email",
         default: "examble@abc.com",
       },
       password: {
-        type: "string",
+        type: "password",
         title: "Password",
         default: "at least 10 characters",
       },
@@ -38,23 +38,23 @@ const schemas = [
     title: "Registration Form",
     details: {
       name: {
-        type: "string",
+        type: "text",
         title: "Full Name",
         default: "Ram Bhattarai",
       },
       email: {
-        type: "string",
+        type: "email",
         title: "Email",
         default: "example@abc.com",
       },
 
       password: {
-        type: "string",
+        type: "password",
         title: "Password",
         default: "at least 10 characters",
       },
       repassword: {
-        type: "string",
+        type: "password",
         title: "Re-Password",
         default: "",
       },

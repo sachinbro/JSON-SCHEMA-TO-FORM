@@ -5,8 +5,10 @@
     <div v-for="(value, key) in data.json_schema.details" :key="key">
       <label :for="key">{{ value.title }}:</label>
 
-      <input :id="key" :name="key" :placeholder="value.default" />
+      <input :id="key" :type="value.type" :name="key" :placeholder="value.default" />
     </div>
+
+    <button type="submit">Submit</button>
   </form>
 
   <button @click="changeSchema">Change schema</button>
@@ -30,8 +32,18 @@ function changeSchema() {
 
 }
 
-const submit = () => {
-  console.log(json_schema);
+const submit = (e) => {
+  console.log(e.target.elements);
+
+  let inputValues = {};
+
+  for (let i = 0; i < e.target.elements.length; i++) {
+    let input = e.target.elements[i];
+    if (input.type !== "submit") {
+      inputValues[input.name] = input.value;
+    }
+  }
+  console.log(inputValues);
 };
 </script>
 <style scoped>
