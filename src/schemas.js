@@ -47,18 +47,19 @@ const schemas = [
         title: "Email",
         default: "example@abc.com",
       },
-    },
-    password: {
-      type: "string",
-      title: "Password",
-      default: "at least 10 characters",
-    },
-    repassword: {
-      type: "string",
-      title: "Re-Password",
-      default: "",
+
+      password: {
+        type: "string",
+        title: "Password",
+        default: "at least 10 characters",
+      },
+      repassword: {
+        type: "string",
+        title: "Re-Password",
+        default: "",
+      },
     },
   },
 ];
 
-export default schemas;
+export { schemas };
