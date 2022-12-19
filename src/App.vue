@@ -11,7 +11,12 @@
         :type="value.type"
         :name="key"
         :placeholder="value.placeholder"
-        v-model="form_values.validate[`${value.title}`]"
+        v-model="form_values.state[`${value.title}`]"
+        :required="value.validation?.required"
+        :minlength="value.validation?.minLength"
+        :maxlength="value.validation?.maxLength"
+        @input="validate(key, value.validation, $event)"
+        @change="resetMessage"
       />
       <textarea
         v-if="value.element === 'textarea'"
@@ -20,17 +25,24 @@
         cols="30"
         rows="10"
         :placeholder="value.placeholder"
-        v-model="form_values.validate[`${value.title}`]"
+        v-model="form_values.state[`${value.title}`]"
+        :required="value.validation?.required"
+        :minlength="value.validation?.minLength"
+        :maxlength="value.validation?.maxLength"
+        @input="validate(key, value.validation, $event)"
+        @change="resetMessage"
       ></textarea>
       <select
         v-if="value.element === 'select'"
         :name="key"
-        v-model="form_values.validate[`${value.title}`]"
+        v-model="form_values.state[`${value.title}`]"
+        :required="value.validation?.required"
       >
         <option v-for="option in value.options" :value="option" :key="option">
           {{ option }}
         </option>
       </select>
+      <span class="error" v-if="error.key == key"> {{ error.message }}</span>
     </div>
 
     <button type="submit">Submit</button>
@@ -38,16 +50,20 @@
 
   <!-- <button @click="changeSchema">Change schema</button> -->
 
-  <pre>{{ form_values.validate }}</pre>
+  <pre>{{ form_values.state }}</pre>
 </template>
 
 <script setup>
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 import { schemas } from "./schemas";
 
 const form = ref(null);
 
-let form_values = reactive({ validate: {} });
+let form_values = reactive({ state: {} });
+let error = reactive({
+  message: "",
+  key: "",
+})
 
 const data = reactive({
   json_schema: schemas[0],
@@ -57,20 +73,46 @@ onMounted(() => {
   loadValuesFromSchema();
 });
 
+function validate(key, validation, $event) {
+  error.key = key;
+
+  if(validation.required && $event.target.value === ""){
+    error.message = "This field is required"
+    return;
+  }
+  if(validation.minLength && $event.target.value.length < validation.minLength){
+    error.message = `This field must be at least ${validation.minLength} characters long`
+    return;
+  }
+  if(validation.maxLength && $event.target.value.length > validation.maxLength){
+    error.message = `This field must be at most ${validation.maxLength} characters long`
+    return;
+  }
+  
+  console.log(key, validation, $event.target.value);
+}
+
+function resetMessage(){
+  error.message = "";
+}
 const loadValuesFromSchema = () => {
   for (const i in schemas[0].details) {
-    form_values.validate[schemas[0].details[i].title] =
+    form_values.state[schemas[0].details[i].title] =
       schemas[0].details[i].placeholder;
   }
 };
 
 const submit = (e) => {
 
-  console.log(form_values.validate);
+  console.log(form_values.state);
 };
 </script>
 <style scoped>
 div {
   margin: 1rem;
+}
+.error {
+  color: red;
+  display: block;
 }
 </style>

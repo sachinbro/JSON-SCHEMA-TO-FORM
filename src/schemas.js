@@ -7,24 +7,40 @@ const schemas = [
         element: "input",
         title: "Full Name",
         placeholder: "Ram Bhattarai",
+        validation: {
+          required: true,
+          minLength: 5,
+          maxLength: 20,
+        }
       },
       email: {
         type: "email",
         element: "input",
         title: "Email",
         placeholder: "example@abc.com",
+        validation: {
+          required: true,
+        }
       },
       phone: {
         type: "string",
         element: "input",
         title: "Phone",
         placeholder: "123-456-7890",
+        validation: {
+          required: true,
+          minLength: 10,
+        }
       },
       password: {
         type: "password",
         element: "input",
         title: "Password",
         placeholder: "at least 10 characters",
+        validation: {
+          required: true,
+          minLength: 10,
+        }
       },
       gender: {
         type: "text",
@@ -38,64 +54,12 @@ const schemas = [
         element: "textarea",
         title: "Feedback",
         placeholder: "Your feedback is important to us",
+        validation: {
+          maxLength: 100,
+        }
       }
     },
-  },
-  // {
-  //   title: "login form",
-  //   details: {
-  //     email: {
-  //       type: "email",
-  //       element: "input",
-  //       title: "Email",
-  //       placeholder: "examble@abc.com",
-  //     },
-     
-  //   },
-  // },
-  // {
-  //   title: "Registration Form",
-  //   details: {
-  //     name: {
-  //       type: "text",
-  //       element: "input",
-  //       title: "Full Name",
-  //       placeholder: "Ram Bhattarai",
-  //     },
-     
-  //     email: {
-  //       type: "email",
-  //       element: "input",
-  //       title: "Email",
-  //       placeholder: "example@abc.com",
-  //     },
-
-  //     password: {
-  //       type: "password",
-  //       title: "Password",
-  //       element: "input",
-  //       placeholder: "at least 10 characters",
-  //     },
-  //     repassword: {
-  //       type: "password",
-  //       element: "input",
-  //       title: "Re-Password",
-  //       placeholder: "",
-  //     },
-  //   },
-  // },
-  // {
-  //   title: "Feedback Form",
-  //   details: {
-  //     name: {
-  //       type: "text",
-  //       element: "input",
-  //       title: "Full Name",
-  //       placeholder: "Ram Bhattarai",
-  //     },
-      
-  //   }
-  // }
+  }
 ];
 
 export { schemas };
