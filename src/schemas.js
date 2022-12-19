@@ -6,93 +6,96 @@ const schemas = [
         type: "text",
         element: "input",
         title: "Full Name",
-        default: "Ram Bhattarai",
+        placeholder: "Ram Bhattarai",
       },
       email: {
         type: "email",
         element: "input",
         title: "Email",
-        default: "example@abc.com",
+        placeholder: "example@abc.com",
       },
       phone: {
         type: "string",
         element: "input",
         title: "Phone",
-        default: "123-456-7890",
-      },
-    },
-  },
-  {
-    title: "login form",
-    details: {
-      email: {
-        type: "email",
-        element: "input",
-        title: "Email",
-        default: "examble@abc.com",
+        placeholder: "123-456-7890",
       },
       password: {
         type: "password",
         element: "input",
         title: "Password",
-        default: "at least 10 characters",
-      },
-    },
-  },
-  {
-    title: "Registration Form",
-    details: {
-      name: {
-        type: "text",
-        element: "input",
-        title: "Full Name",
-        default: "Ram Bhattarai",
+        placeholder: "at least 10 characters",
       },
       gender: {
         type: "text",
         element: "select",
-        default: "Select gender",
+        placeholder: "Select gender",
         title: "Gender",
         options: ["male", "female", "other"],
-      },
-      email: {
-        type: "email",
-        element: "input",
-        title: "Email",
-        default: "example@abc.com",
-      },
-
-      password: {
-        type: "password",
-        title: "Password",
-        element: "input",
-        default: "at least 10 characters",
-      },
-      repassword: {
-        type: "password",
-        element: "input",
-        title: "Re-Password",
-        default: "",
-      },
-    },
-  },
-  {
-    title: "Feedback Form",
-    details: {
-      name: {
-        type: "text",
-        element: "input",
-        title: "Full Name",
-        default: "Ram Bhattarai",
       },
       feedback: {
         type: "text",
         element: "textarea",
         title: "Feedback",
-        default: "Your feedback is important to us",
+        placeholder: "Your feedback is important to us",
       }
-    }
-  }
+    },
+  },
+  // {
+  //   title: "login form",
+  //   details: {
+  //     email: {
+  //       type: "email",
+  //       element: "input",
+  //       title: "Email",
+  //       placeholder: "examble@abc.com",
+  //     },
+     
+  //   },
+  // },
+  // {
+  //   title: "Registration Form",
+  //   details: {
+  //     name: {
+  //       type: "text",
+  //       element: "input",
+  //       title: "Full Name",
+  //       placeholder: "Ram Bhattarai",
+  //     },
+     
+  //     email: {
+  //       type: "email",
+  //       element: "input",
+  //       title: "Email",
+  //       placeholder: "example@abc.com",
+  //     },
+
+  //     password: {
+  //       type: "password",
+  //       title: "Password",
+  //       element: "input",
+  //       placeholder: "at least 10 characters",
+  //     },
+  //     repassword: {
+  //       type: "password",
+  //       element: "input",
+  //       title: "Re-Password",
+  //       placeholder: "",
+  //     },
+  //   },
+  // },
+  // {
+  //   title: "Feedback Form",
+  //   details: {
+  //     name: {
+  //       type: "text",
+  //       element: "input",
+  //       title: "Full Name",
+  //       placeholder: "Ram Bhattarai",
+  //     },
+      
+  //   }
+  // }
 ];
 
 export { schemas };

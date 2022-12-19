@@ -10,7 +10,7 @@
         :id="key"
         :type="value.type"
         :name="key"
-        :placeholder="value.default"
+        :placeholder="value.placeholder"
         v-model="form_values.validate[`${value.title}`]"
       />
       <textarea
@@ -19,9 +19,10 @@
         id=""
         cols="30"
         rows="10"
-        :placeholder="value.default"
+        :placeholder="value.placeholder"
+        v-model="form_values.validate[`${value.title}`]"
       ></textarea>
-      <select v-if="value.element === 'select'" :name="key">
+      <select v-if="value.element === 'select'" :name="key" v-model="form_values.validate[`${value.title}`]">
         <option v-for="option in value.options" :value="option" :key="option">
           {{ option }}
         </option>
@@ -31,13 +32,13 @@
     <button type="submit">Submit</button>
   </form>
 
-  <button @click="changeSchema">Change schema</button>
+  <!-- <button @click="changeSchema">Change schema</button> -->
 
   <pre>{{ form_values.validate }}</pre>
 </template>
 
 <script setup>
-import { reactive, ref, watch } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 import { schemas } from "./schemas";
 
 const form = ref(null);
@@ -56,11 +57,18 @@ const data = reactive({
   json_schema: schemas[0],
 });
 
-function changeSchema() {
-  form_values.validate = {};
-  const random = Math.floor(Math.random() * schemas.length);
-  data.json_schema = schemas[random];
-}
+onMounted(() => {
+  for(const i in schemas[0].details) {
+    form_values.validate[schemas[0].details[i].title] = schemas[0].details[i].placeholder;
+  }
+ 
+});
+
+// function changeSchema() {
+//   form_values.validate = {};
+//   const random = Math.floor(Math.random() * schemas.length);
+//   data.json_schema = schemas[random];
+// }
 
 const submit = (e) => {
   let inputValues = {};
