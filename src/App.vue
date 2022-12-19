@@ -32,6 +32,8 @@
   </form>
 
   <button @click="changeSchema">Change schema</button>
+
+  <pre>{{ form_values.validate }}</pre>
 </template>
 
 <script setup>
@@ -55,6 +57,7 @@ const data = reactive({
 });
 
 function changeSchema() {
+  form_values.validate = {};
   const random = Math.floor(Math.random() * schemas.length);
   data.json_schema = schemas[random];
 }
