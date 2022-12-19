@@ -65,9 +65,8 @@ const loadValuesFromSchema = () => {
 };
 
 const submit = (e) => {
-  let inputValues = {};
 
-  console.log(form.value);
+  console.log(form_values.validate);
 };
 </script>
 <style scoped>
