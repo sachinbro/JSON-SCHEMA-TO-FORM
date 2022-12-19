@@ -1,11 +1,15 @@
 <template>
-  <form action="" @submit.prevent="submit">
+  <form action="" @submit.prevent="submit" ref="form">
     <h2>{{ data.json_schema?.title }}</h2>
 
     <div v-for="(value, key) in data.json_schema.details" :key="key">
       <label :for="key">{{ value.title }}:</label>
 
-      <input :id="key" :type="value.type" :name="key" :placeholder="value.default" />
+      <input v-if="value.element === 'input'" :id="key" :type="value.type" :name="key" :placeholder="value.default" />
+      <textarea v-if="value.element === 'textarea'" :name="key" id="" cols="30" rows="10" :placeholder="value.default"></textarea>
+      <select v-if="value.element === 'select'" :name="key">
+        <option v-for="option in value.options" :value="option" :key="option">{{ option }}</option>
+      </select>
     </div>
 
     <button type="submit">Submit</button>
@@ -15,8 +19,10 @@
 </template>
 
 <script setup>
-import { reactive, onMounted } from "vue";
+import { reactive, onMounted, ref } from "vue";
 import { schemas } from "./schemas";
+
+const form = ref(null);
 
 const data = reactive({
   json_schema: schemas[0],
