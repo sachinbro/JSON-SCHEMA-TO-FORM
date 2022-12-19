@@ -22,7 +22,11 @@
         :placeholder="value.placeholder"
         v-model="form_values.validate[`${value.title}`]"
       ></textarea>
-      <select v-if="value.element === 'select'" :name="key" v-model="form_values.validate[`${value.title}`]">
+      <select
+        v-if="value.element === 'select'"
+        :name="key"
+        v-model="form_values.validate[`${value.title}`]"
+      >
         <option v-for="option in value.options" :value="option" :key="option">
           {{ option }}
         </option>
@@ -38,48 +42,32 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref, watch } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { schemas } from "./schemas";
 
 const form = ref(null);
 
 let form_values = reactive({ validate: {} });
 
-watch(
-  form_values.validate,
-  () => {
-    console.log(form_values.validate);
-  },
-  { deep: true }
-);
-
 const data = reactive({
   json_schema: schemas[0],
 });
 
 onMounted(() => {
-  for(const i in schemas[0].details) {
-    form_values.validate[schemas[0].details[i].title] = schemas[0].details[i].placeholder;
-  }
- 
+  loadValuesFromSchema();
 });
 
-// function changeSchema() {
-//   form_values.validate = {};
-//   const random = Math.floor(Math.random() * schemas.length);
-//   data.json_schema = schemas[random];
-// }
+const loadValuesFromSchema = () => {
+  for (const i in schemas[0].details) {
+    form_values.validate[schemas[0].details[i].title] =
+      schemas[0].details[i].placeholder;
+  }
+};
 
 const submit = (e) => {
   let inputValues = {};
 
-  for (let i = 0; i < e.target.elements.length; i++) {
-    let input = e.target.elements[i];
-    if (input.type !== "submit") {
-      inputValues[input.name] = input.value;
-    }
-  }
-  // console.log(form_values.validate); // console of form values using v-model
+  console.log(form.value);
 };
 </script>
 <style scoped>
