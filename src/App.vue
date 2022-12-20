@@ -12,9 +12,6 @@
         :name="key"
         :placeholder="value.placeholder"
         v-model="form_values.state[`${value.title}`]"
-        :required="value.validation?.required"
-        :minlength="value.validation?.minLength"
-        :maxlength="value.validation?.maxLength"
         @input="validate(key, value.validation, $event)"
       />
       <textarea
@@ -25,11 +22,7 @@
         rows="10"
         :placeholder="value.placeholder"
         v-model="form_values.state[`${value.title}`]"
-        :required="value.validation?.required"
-        :minlength="value.validation?.minLength"
-        :maxlength="value.validation?.maxLength"
         @input="validate(key, value.validation, $event)"
-        @change="resetMessage"
       ></textarea>
       <select
         v-if="value.element === 'select'"
@@ -47,8 +40,6 @@
     <button type="submit">Submit</button>
   </form>
 
-  <!-- <button @click="changeSchema">Change schema</button> -->
-
   <pre>{{ form_values.state }}</pre>
 </template>
 
@@ -59,7 +50,7 @@ import { schemas } from "./schemas";
 const form = ref(null);
 
 let form_values = reactive({ state: {} });
-let error = reactive({})
+let error = reactive({});
 
 const data = reactive({
   json_schema: schemas[0],
@@ -70,27 +61,31 @@ onMounted(() => {
 });
 
 function validate(key, validation, $event) {
-
-  if(validation.required && $event.target.value === ""){
-    error[key] = "This field is required"
+  if (validation.required && $event.target.value === "") {
+    error[key] = "This field is required";
     return;
   }
-  if(validation.minLength && $event.target.value.length < validation.minLength){
-    error[key] = `This field must be at least ${validation.minLength} characters long`
+  if (
+    validation.minLength &&
+    $event.target.value.length < validation.minLength
+  ) {
+    error[
+      key
+    ] = `This field must be at least ${validation.minLength} characters long`;
     return;
   }
-  if(validation.maxLength && $event.target.value.length > validation.maxLength){
-    error[key] = `This field must be at most ${validation.maxLength} characters long`
+  if (
+    validation.maxLength &&
+    $event.target.value.length > validation.maxLength
+  ) {
+    error[
+      key
+    ] = `This field must be at most ${validation.maxLength} characters long`;
     return;
   }
   error[key] = "";
-  
-  console.log(key, validation, $event.target.value);
 }
 
-function resetMessage(){
-  error.message = "";
-}
 const loadValuesFromSchema = () => {
   for (const i in schemas[0].details) {
     form_values.state[schemas[0].details[i].title] =
@@ -99,7 +94,6 @@ const loadValuesFromSchema = () => {
 };
 
 const submit = (e) => {
-
   console.log(form_values.state);
 };
 </script>
