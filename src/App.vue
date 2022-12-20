@@ -16,7 +16,6 @@
         :minlength="value.validation?.minLength"
         :maxlength="value.validation?.maxLength"
         @input="validate(key, value.validation, $event)"
-        @change="resetMessage"
       />
       <textarea
         v-if="value.element === 'textarea'"
@@ -42,7 +41,7 @@
           {{ option }}
         </option>
       </select>
-      <span class="error" v-if="error.key == key"> {{ error.message }}</span>
+      <span class="error" v-if="error[`${key}`]"> {{ error[key] }}</span>
     </div>
 
     <button type="submit">Submit</button>
@@ -60,10 +59,7 @@ import { schemas } from "./schemas";
 const form = ref(null);
 
 let form_values = reactive({ state: {} });
-let error = reactive({
-  message: "",
-  key: "",
-})
+let error = reactive({})
 
 const data = reactive({
   json_schema: schemas[0],
@@ -74,20 +70,20 @@ onMounted(() => {
 });
 
 function validate(key, validation, $event) {
-  error.key = key;
 
   if(validation.required && $event.target.value === ""){
-    error.message = "This field is required"
+    error[key] = "This field is required"
     return;
   }
   if(validation.minLength && $event.target.value.length < validation.minLength){
-    error.message = `This field must be at least ${validation.minLength} characters long`
+    error[key] = `This field must be at least ${validation.minLength} characters long`
     return;
   }
   if(validation.maxLength && $event.target.value.length > validation.maxLength){
-    error.message = `This field must be at most ${validation.maxLength} characters long`
+    error[key] = `This field must be at most ${validation.maxLength} characters long`
     return;
   }
+  error[key] = "";
   
   console.log(key, validation, $event.target.value);
 }
