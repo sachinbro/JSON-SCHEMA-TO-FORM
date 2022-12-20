@@ -19,7 +19,7 @@
         :name="key"
         id=""
         cols="30"
-        rows="10"
+        rows="5"
         :placeholder="value.placeholder"
         v-model="form_values.state[`${value.title}`]"
         @input="validate(key, value.validation, $event)"
@@ -40,7 +40,16 @@
     <button type="submit">Submit</button>
   </form>
 
-  <pre>{{ form_values.state }}</pre>
+  <div class="show-values">
+    <div>
+      <h2>Form Values</h2>
+      <pre>{{ form_values.state }}</pre>
+    </div>
+    <div>
+      <h2>Validated Values</h2>
+      <pre>{{ validated_form_values.state }}</pre>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -50,6 +59,7 @@ import { schemas } from "./schemas";
 const form = ref(null);
 
 let form_values = reactive({ state: {} });
+let validated_form_values = reactive({ state: {} });
 let error = reactive({});
 
 const data = reactive({
@@ -83,6 +93,7 @@ function validate(key, validation, $event) {
     ] = `This field must be at most ${validation.maxLength} characters long`;
     return;
   }
+  validated_form_values.state[key] = $event.target.value;
   error[key] = "";
 }
 
@@ -90,13 +101,18 @@ const loadValuesFromSchema = () => {
   for (const i in schemas[0].details) {
     form_values.state[schemas[0].details[i].title] =
       schemas[0].details[i].placeholder;
+
+      validated_form_values.state[i] =
+      schemas[0].details[i].placeholder;
   }
 };
 
 const submit = (e) => {
   console.log(form_values.state);
+  console.log(validated_form_values.state);
 };
 </script>
+
 <style scoped>
 div {
   margin: 1rem;
@@ -105,4 +121,10 @@ div {
   color: red;
   display: block;
 }
+
+.show-values {
+  display: flex;
+  justify-content: space-between;
+}
+
 </style>
