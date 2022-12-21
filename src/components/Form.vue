@@ -1,8 +1,8 @@
 <template>
   <form action="" @submit.prevent="submit" ref="form">
-    <h2>{{ data.json_schema?.title }}</h2>
+    <h2>{{ data_schema.json_schema?.title }}</h2>
 
-    <div v-for="(value, key) in data.json_schema.details" :key="key">
+    <div v-for="(value, key) in data_schema.json_schema.details" :key="key">
       <label :for="key">{{ value.title }}:</label>
 
       <input
@@ -10,7 +10,7 @@
         :type="value.type"
         :name="key"
         :placeholder="value.placeholder"
-        :value="form_values.state[key]"
+        :value="data[key]"
         @input="validate(key, value.validation, $event)"
       />
       <textarea
@@ -19,16 +19,16 @@
         cols="30"
         rows="5"
         :placeholder="value.placeholder"
-        :value="form_values.state[key]"
+        :value="data[key]"
         @input="validate(key, value.validation, $event)"
       ></textarea>
       <select
         v-if="value.element === 'select'"
         :name="key"
-        v-model="form_values.state[`${value.title}`]"
-        :required="value.validation?.required"
+        :value="data[key]"
+        @input="validate(key, value.validation, $event)"
       >
-        <option v-for="option in value.options" :value="option" :key="option">
+        <option v-for="option in data[key]" :value="option" :key="option">
           {{ option }}
         </option>
       </select>
@@ -52,25 +52,34 @@ let form_values = reactive({ state: {} });
 let validated_values = reactive({ state: {} });
 let errors = reactive({});
 
-const { schemas } = defineProps({
+const { schemas, data } = defineProps({
   schemas: {
     type: Array,
     required: true,
   },
+  data: {
+    type: Object,
+    required: true,
+  },
 });
 
-const data = reactive({
+const data_schema = reactive({
   json_schema: schemas[0],
 });
 
 onMounted(() => {
   loadValuesFromSchema();
+  loadDataFromProps();
 });
 
 const loadValuesFromSchema = () => {
   for (const i in schemas[0].details) {
     form_values.state[i] = schemas[0].details[i].placeholder;
   }
+};
+
+const loadDataFromProps = () => {
+  form_values.state = data;
 };
 
 function validate(key, validation, $event) {
