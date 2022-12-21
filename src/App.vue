@@ -32,28 +32,27 @@
           {{ option }}
         </option>
       </select>
-      <span class="error" v-if="error[`${key}`]"> {{ error[key] }}</span>
+      <span class="error" v-if="errors[`${key}`]"> {{ errors[key] }}</span>
     </div>
 
     <button type="submit">Submit</button>
   </form>
 
-  <div class="show-values">
+  <!-- <div class="show-values">
     <div>
       <h2>Form Values</h2>
       <pre>{{ form_values.state }}</pre>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script setup>
-import { onMounted, reactive, ref, watch } from "vue";
+import { onMounted, reactive } from "vue";
 import { schemas } from "./schemas";
 
-const form = ref(null);
-
 let form_values = reactive({ state: {} });
-let error = reactive({});
+let validated_values = reactive({ state: {} });
+let errors = reactive({});
 
 const data = reactive({
   json_schema: schemas[0],
@@ -63,46 +62,49 @@ onMounted(() => {
   loadValuesFromSchema();
 });
 
+const loadValuesFromSchema = () => {
+  for (const i in schemas[0].details) {
+    form_values.state[i] = schemas[0].details[i].placeholder;
+  }
+};
+
 function validate(key, validation, $event) {
+  form_values.state[key] = $event.target.value;
+
   if (validation.required && $event.target.value === "") {
-    error[key] = "This field is required";
-    console.log("no")
+    errors[key] = "This field is required";
     return;
   }
   if (
     validation.minLength &&
     $event.target.value.length < validation.minLength
   ) {
-    error[
+    errors[
       key
     ] = `This field must be at least ${validation.minLength} characters long`;
-    console.log("less")
     return;
   }
   if (
     validation.maxLength &&
     $event.target.value.length > validation.maxLength
   ) {
-    error[
+    errors[
       key
     ] = `This field must be at most ${validation.maxLength} characters long`;
-    console.log("more")
     return;
   }
-  form_values.state[key] = $event.target.value;
-  error[key] = "";
+  errors[key] = "";
 }
 
-const loadValuesFromSchema = () => {
-  for (const i in schemas[0].details) {
-    form_values.state[i] =
-      schemas[0].details[i].placeholder;
-
-  }
-};
-
 const submit = (e) => {
-  console.log(form_values.state);
+  for (const error in errors) {
+    if (errors[error] !== "") {
+      return;
+    }
+  }
+  validated_values.state = form_values.state;
+
+  console.log(validated_values.state);
 };
 </script>
 
@@ -119,5 +121,4 @@ div {
   display: flex;
   justify-content: space-between;
 }
-
 </style>
