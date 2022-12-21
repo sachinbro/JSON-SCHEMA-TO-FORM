@@ -63,13 +63,11 @@ const { schema, data } = defineProps({
   },
 });
 
-onMounted(() => {
-  loadDataFromProps();
-});
+const emit = defineEmits(["updateData"]);
 
-const loadDataFromProps = () => {
+onMounted(() => {
   form_values.state = data;
-};
+});
 
 function validate(key, validation, $event) {
   form_values.state[key] = $event.target.value;
@@ -107,7 +105,7 @@ const submit = (e) => {
   }
   validated_values.state = form_values.state;
 
-  console.log(validated_values.state);
+  emit("updateData", validated_values.state);
 };
 </script>
 
