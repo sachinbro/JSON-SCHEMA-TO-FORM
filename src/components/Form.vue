@@ -1,8 +1,8 @@
 <template>
   <form action="" @submit.prevent="submit" ref="form">
-    <h2>{{ data_schema.json_schema?.title }}</h2>
+    <h2>{{ schema?.title }}</h2>
 
-    <div v-for="(value, key) in data_schema.json_schema.details" :key="key">
+    <div v-for="(value, key) in schema.details" :key="key">
       <label :for="key">{{ value.title }}:</label>
 
       <input
@@ -39,22 +39,22 @@
   </form>
 </template>
 
-<script >
+<script>
 export default {
   name: "Form",
 };
 </script>
 
-<script setup >
+<script setup>
 import { onMounted, reactive } from "vue";
 
 let form_values = reactive({ state: {} });
 let validated_values = reactive({ state: {} });
 let errors = reactive({});
 
-const { schemas, data } = defineProps({
-  schemas: {
-    type: Array,
+const { schema, data } = defineProps({
+  schema: {
+    type: Object,
     required: true,
   },
   data: {
@@ -63,20 +63,9 @@ const { schemas, data } = defineProps({
   },
 });
 
-const data_schema = reactive({
-  json_schema: schemas[0],
-});
-
 onMounted(() => {
-  loadValuesFromSchema();
   loadDataFromProps();
 });
-
-const loadValuesFromSchema = () => {
-  for (const i in schemas[0].details) {
-    form_values.state[i] = schemas[0].details[i].placeholder;
-  }
-};
 
 const loadDataFromProps = () => {
   form_values.state = data;

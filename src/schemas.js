@@ -1,6 +1,6 @@
-const schemas = [
+const schema =
   {
-    title: "Contact Form",
+    title: "Register Form",
     details: {
       name: {
         type: "text",
@@ -42,24 +42,7 @@ const schemas = [
           minLength: 10,
         }
       },
-      gender: {
-        type: "text",
-        element: "select",
-        placeholder: "Select gender",
-        title: "Gender",
-        options: ["male", "female", "other"],
-      },
-      feedback: {
-        type: "text",
-        element: "textarea",
-        title: "Feedback",
-        placeholder: "Your feedback is important to us",
-        validation: {
-          maxLength: 100,
-        }
-      }
     },
-  }
-];
+  };
 
-export { schemas };
+export { schema };
