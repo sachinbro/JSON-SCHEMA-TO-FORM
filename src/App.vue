@@ -7,21 +7,19 @@
 
       <input
         v-if="value.element === 'input'"
-        :id="key"
         :type="value.type"
         :name="key"
         :placeholder="value.placeholder"
-        v-model="form_values.state[`${value.title}`]"
+        :value="form_values.state[key]"
         @input="validate(key, value.validation, $event)"
       />
       <textarea
         v-if="value.element === 'textarea'"
         :name="key"
-        id=""
         cols="30"
         rows="5"
         :placeholder="value.placeholder"
-        v-model="form_values.state[`${value.title}`]"
+        :value="form_values.state[key]"
         @input="validate(key, value.validation, $event)"
       ></textarea>
       <select
@@ -45,10 +43,6 @@
       <h2>Form Values</h2>
       <pre>{{ form_values.state }}</pre>
     </div>
-    <div>
-      <h2>Validated Values</h2>
-      <pre>{{ validated_form_values.state }}</pre>
-    </div>
   </div>
 </template>
 
@@ -59,7 +53,6 @@ import { schemas } from "./schemas";
 const form = ref(null);
 
 let form_values = reactive({ state: {} });
-let validated_form_values = reactive({ state: {} });
 let error = reactive({});
 
 const data = reactive({
@@ -73,6 +66,7 @@ onMounted(() => {
 function validate(key, validation, $event) {
   if (validation.required && $event.target.value === "") {
     error[key] = "This field is required";
+    console.log("no")
     return;
   }
   if (
@@ -82,6 +76,7 @@ function validate(key, validation, $event) {
     error[
       key
     ] = `This field must be at least ${validation.minLength} characters long`;
+    console.log("less")
     return;
   }
   if (
@@ -91,25 +86,23 @@ function validate(key, validation, $event) {
     error[
       key
     ] = `This field must be at most ${validation.maxLength} characters long`;
+    console.log("more")
     return;
   }
-  validated_form_values.state[key] = $event.target.value;
+  form_values.state[key] = $event.target.value;
   error[key] = "";
 }
 
 const loadValuesFromSchema = () => {
   for (const i in schemas[0].details) {
-    form_values.state[schemas[0].details[i].title] =
+    form_values.state[i] =
       schemas[0].details[i].placeholder;
 
-      validated_form_values.state[i] =
-      schemas[0].details[i].placeholder;
   }
 };
 
 const submit = (e) => {
   console.log(form_values.state);
-  console.log(validated_form_values.state);
 };
 </script>
 
