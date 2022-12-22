@@ -1,5 +1,5 @@
 <template>
-  <Form :schema="schema" :data="data" @updateData="updateData(data)">
+  <Form :schema="schema" :data="data" @updateData="updateData">
     
   </Form>
 </template>
@@ -17,9 +17,9 @@ let data = {
   password: "password123",
 };
 
-const updateData = (updatedData) => {
-  data = updatedData;
-  console.log(updateData);
+const updateData = (validate_data) => {
+  data = validate_data;
+  console.log(validate_data);
 };
 
 </script>

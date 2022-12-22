@@ -69,7 +69,7 @@ onMounted(() => {
   form_values.state = data;
 });
 
-function validate({name, validation, event}) {
+function validate({ name, validation, event }) {
   form_values.state[name] = event.target.value;
 
   if (validation.required && event.target.value === "") {
@@ -104,7 +104,6 @@ const submit = (e) => {
     }
   }
   validated_values.state = form_values.state;
-
 
   emit("updateData", validated_values.state);
 };
