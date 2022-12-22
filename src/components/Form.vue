@@ -3,35 +3,33 @@
     <h2>{{ schema?.title }}</h2>
 
     <div v-for="(value, key) in schema.details" :key="key">
-      <label :for="key">{{ value.title }}:</label>
+      <label :for="key">{{ value.title }}: {{ key }}</label>
 
-      <input
-        v-if="value.element === 'input'"
-        :type="value.type"
+      <InputElement
+        :data="data"
         :name="key"
-        :placeholder="value.placeholder"
-        :value="data[key]"
-        @input="validate(key, value.validation, $event)"
+        :value="value"
+        @validate="validate"
       />
-      <textarea
+      <!-- <textarea
         v-if="value.element === 'textarea'"
         :name="key"
         cols="30"
         rows="5"
         :placeholder="value.placeholder"
         :value="data[key]"
-        @input="validate(key, value.validation, $event)"
+        @input="validate(key, value.validation, event)"
       ></textarea>
       <select
         v-if="value.element === 'select'"
         :name="key"
         :value="data[key]"
-        @input="validate(key, value.validation, $event)"
+        @input="validate(key, value.validation, event)"
       >
         <option v-for="option in data[key]" :value="option" :key="option">
           {{ option }}
         </option>
-      </select>
+      </select> -->
       <span class="error" v-if="errors[`${key}`]"> {{ errors[key] }}</span>
     </div>
 
@@ -47,6 +45,8 @@ export default {
 
 <script setup>
 import { onMounted, reactive } from "vue";
+
+import InputElement from "./Form Elements/InputElement.vue";
 
 let form_values = reactive({ state: {} });
 let validated_values = reactive({ state: {} });
@@ -69,32 +69,32 @@ onMounted(() => {
   form_values.state = data;
 });
 
-function validate(key, validation, $event) {
-  form_values.state[key] = $event.target.value;
+function validate({name, validation, event}) {
+  form_values.state[name] = event.target.value;
 
-  if (validation.required && $event.target.value === "") {
-    errors[key] = "This field is required";
+  if (validation.required && event.target.value === "") {
+    errors[name] = "This field is required";
     return;
   }
   if (
     validation.minLength &&
-    $event.target.value.length < validation.minLength
+    event.target.value.length < validation.minLength
   ) {
     errors[
-      key
+      name
     ] = `This field must be at least ${validation.minLength} characters long`;
     return;
   }
   if (
     validation.maxLength &&
-    $event.target.value.length > validation.maxLength
+    event.target.value.length > validation.maxLength
   ) {
     errors[
-      key
+      name
     ] = `This field must be at most ${validation.maxLength} characters long`;
     return;
   }
-  errors[key] = "";
+  errors[name] = "";
 }
 
 const submit = (e) => {
@@ -104,6 +104,7 @@ const submit = (e) => {
     }
   }
   validated_values.state = form_values.state;
+
 
   emit("updateData", validated_values.state);
 };

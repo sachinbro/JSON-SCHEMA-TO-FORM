@@ -1,5 +1,7 @@
 <template>
-  <Form :schema="schema" :data="data" @updateData="updateData(data)"/>
+  <Form :schema="schema" :data="data" @updateData="updateData(data)">
+    
+  </Form>
 </template>
 
 <script setup>
